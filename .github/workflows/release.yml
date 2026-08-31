@@ -16,8 +16,10 @@ jobs:
           fetch-depth: 0
       - name: Verify annotated tag
         run: |
-          test "$(git cat-file -t "$GITHUB_REF_NAME^{tag}")" = tag
-          test "$(git rev-parse "$GITHUB_REF_NAME^{}")" = "$GITHUB_SHA"
+          git fetch --force --no-tags origin "refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME"
+          tag_object=$(git rev-parse "refs/tags/$GITHUB_REF_NAME")
+          test "$(git cat-file -t "$tag_object")" = tag
+          test "$(git rev-list -n 1 "$tag_object^{commit}")" = "$GITHUB_SHA"
       - name: Build source archive and checksums
         run: |
           git archive --format=tar.gz --prefix="gooo-self-repair-example-${GITHUB_REF_NAME#v}/" -o "gooo-self-repair-example-${GITHUB_REF_NAME#v}.tar.gz" "$GITHUB_SHA"
