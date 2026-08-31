@@ -79,7 +79,11 @@ download_release_artifact() {
     test "$(jq '.assets | length' "$api_file")" -eq 0
     test "$artifact_url" = "$(jq -r '.tarball_url' "$api_file")"
   fi
-  curl -fsSL --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/octet-stream' "$artifact_url" -o "$artifact_file"
+  if test "$artifact_kind" = release_asset; then
+    curl -fsSL --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/octet-stream' "$artifact_url" -o "$artifact_file"
+  else
+    curl -fsSL --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "$artifact_url" -o "$artifact_file"
+  fi
   actual_digest="sha256:$(sha256sum "$artifact_file" | awk '{print $1}')"
   test "$actual_digest" = "$expected_digest"
   jq -cn \
