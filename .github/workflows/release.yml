@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - name: Verify annotated tag
         run: |
-          test "$(git cat-file -t "$GITHUB_REF_NAME")" = tag
+          test "$(git cat-file -t "$GITHUB_REF_NAME^{tag}")" = tag
           test "$(git rev-parse "$GITHUB_REF_NAME^{}")" = "$GITHUB_SHA"
       - name: Build source archive and checksums
         run: |
