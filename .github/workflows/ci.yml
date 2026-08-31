@@ -26,6 +26,7 @@ jobs:
           formatted=$(gofmt -l cmd generated internal)
           if [ -n "$formatted" ]; then
             printf '%s\n' "$formatted"
+            gofmt -d $formatted
             exit 1
           fi
       - name: Vet
