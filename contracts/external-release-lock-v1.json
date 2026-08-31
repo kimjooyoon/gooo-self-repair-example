@@ -1,0 +1,151 @@
+{
+  "schema": "gooo/self-repair/external-release-lock/v1",
+  "authority": "github-release-api",
+  "tag_resolution": "annotated-tag-object-to-commit",
+  "releases": [
+    {
+      "id": "improvement-proposer",
+      "repository": "kimjooyoon/gooo-improvement-proposer",
+      "tag": "v0.1.1",
+      "release_api_path": "repos/kimjooyoon/gooo-improvement-proposer/releases/tags/v0.1.1",
+      "release_id": 379780599,
+      "release_node_id": "RE_kwDOUJwst84Wov33",
+      "tag_object_sha": "2ed70c6fae93c21b0c4839d4fa2ff0f4da3ebc59",
+      "target_commit_sha": "6757651d5b6abae7dfb7c7a3ec7a0cab103e3279",
+      "release_api_identity_digest": "sha256:47398bc0a8b9bcf2f1c3cbe253c1d97fe3c1a4142eed5fd040e93996303dea2c",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "gooo-improvement-proposer-v0.1.1-evidence.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-improvement-proposer/releases/download/v0.1.1/gooo-improvement-proposer-v0.1.1-evidence.tar.gz",
+        "digest": "sha256:ceccc9f5a3a44ff3ef27d9a78cc9569192f6b5f119a1cc338dc5cae49b8e9e53"
+      }
+    },
+    {
+      "id": "semantic-mutation-lab",
+      "repository": "kimjooyoon/gooo-semantic-mutation-lab",
+      "tag": "v0.1.1",
+      "release_api_path": "repos/kimjooyoon/gooo-semantic-mutation-lab/releases/tags/v0.1.1",
+      "release_id": 379474761,
+      "release_node_id": "RE_kwDOUJRe184WnlNJ",
+      "tag_object_sha": "b33aad728a25669a8cbfd3348e4e5841920c44ef",
+      "target_commit_sha": "1c2ed798200edaadd34853deb2bc4c7e9828e40b",
+      "release_api_identity_digest": "sha256:02b6c6fa720258ec49af0274503a065c359cef34eb37349e37a3fa62c2a25f68",
+      "immutable": true,
+      "artifact": {
+        "kind": "tag_archive",
+        "name": "gooo-semantic-mutation-lab-v0.1.1-source.tar.gz",
+        "url": "https://api.github.com/repos/kimjooyoon/gooo-semantic-mutation-lab/tarball/v0.1.1",
+        "digest": "sha256:455f6db4c96e315b86c43b26f8f70003f7633e34c6e1e9e462ec20e202c60369"
+      }
+    },
+    {
+      "id": "improvement-selector",
+      "repository": "kimjooyoon/gooo-improvement-selector",
+      "tag": "v0.1.1",
+      "release_api_path": "repos/kimjooyoon/gooo-improvement-selector/releases/tags/v0.1.1",
+      "release_id": 379479460,
+      "release_node_id": "RE_kwDOUJRidM4WnmWk",
+      "tag_object_sha": "e6d8e0531193fc412332ff4232bdc2dbbc905e26",
+      "target_commit_sha": "5dc7686d14bbfc80513772e0c133e69fb99aea9e",
+      "release_api_identity_digest": "sha256:f00caf28cbf1e306323f8ddbaa393d34e2723929491a58cd8b8ebd4cd5294a5d",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "gooo-improvement-selector-v0.1.1-evidence.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-improvement-selector/releases/download/v0.1.1/gooo-improvement-selector-v0.1.1-evidence.tar.gz",
+        "digest": "sha256:076e824371bcf4d4236a3b2db99c3bab6d99cef7b2f69b0c0acca095fc247ed3"
+      }
+    },
+    {
+      "id": "proof-kernel-boundary",
+      "repository": "kimjooyoon/gooo-proof-kernel-boundary",
+      "tag": "v0.1.0",
+      "release_api_path": "repos/kimjooyoon/gooo-proof-kernel-boundary/releases/tags/v0.1.0",
+      "release_id": 379471653,
+      "release_node_id": "RE_kwDOUJRbXc4Wnkcl",
+      "tag_object_sha": "e08ec36b31754ba0f853b0f3932de5ff7a70f5ac",
+      "target_commit_sha": "e08ec36b31754ba0f853b0f3932de5ff7a70f5ac",
+      "release_api_identity_digest": "sha256:6c66ae47772d9109ad7527232c3ea2e00af15ebffd7f3bcc88c73b77226abd17",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "proof-kernel-boundary-v0.1.0-evidence.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-proof-kernel-boundary/releases/download/v0.1.0/proof-kernel-boundary-v0.1.0-evidence.tar.gz",
+        "digest": "sha256:11638cbfbeb9152751724a4d16dc4b2f9f619adc36348ec3203864c7b809ad1b"
+      }
+    },
+    {
+      "id": "test-frontier",
+      "repository": "kimjooyoon/gooo-test-frontier",
+      "tag": "v0.1.1",
+      "release_api_path": "repos/kimjooyoon/gooo-test-frontier/releases/tags/v0.1.1",
+      "release_id": 379783807,
+      "release_node_id": "RE_kwDOUJwx_M4Wowp_",
+      "tag_object_sha": "398577621c42eb7450416bdf086b9304c8c1e42a",
+      "target_commit_sha": "f8e1f8aebb67abbda237073893a4a855a8659df5",
+      "release_api_identity_digest": "sha256:7dab9ed95735044e0c90c5244572e3dd6a7f1da42c276836e6ae4aa1f1734adf",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "gooo-test-frontier-v0.1.1.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-test-frontier/releases/download/v0.1.1/gooo-test-frontier-v0.1.1.tar.gz",
+        "digest": "sha256:1ef4c6a13288cb8198734e8fde252d470169b2b4f0d09006fdf467d5317917f8"
+      }
+    },
+    {
+      "id": "verification-reuse",
+      "repository": "kimjooyoon/gooo-verification-reuse",
+      "tag": "v0.1.2",
+      "release_api_path": "repos/kimjooyoon/gooo-verification-reuse/releases/tags/v0.1.2",
+      "release_id": 379662322,
+      "release_node_id": "RE_kwDOUJm57c4WoS_y",
+      "tag_object_sha": "3d9bf3374b4ad7e649499ff4a2538b9ff16fab7a",
+      "target_commit_sha": "5252c202d8f7e3637209037c1b0bf9595b7da661",
+      "release_api_identity_digest": "sha256:968df9b7de9e083a4226e2d5389636ee1bccfe01448e2e5dce2ddcee8fcab409",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "gooo-verification-reuse-v0.1.2.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-verification-reuse/releases/download/v0.1.2/gooo-verification-reuse-v0.1.2.tar.gz",
+        "digest": "sha256:2be270c57832fe972f69615cedcb787f9f503a11376699bb827299534e8719f6"
+      }
+    },
+    {
+      "id": "semantic-drift-guard",
+      "repository": "kimjooyoon/gooo-semantic-drift-guard",
+      "tag": "v0.1.1",
+      "release_api_path": "repos/kimjooyoon/gooo-semantic-drift-guard/releases/tags/v0.1.1",
+      "release_id": 379915376,
+      "release_node_id": "RE_kwDOUJ-FSc4WpQxw",
+      "tag_object_sha": "1e1cf4882347ccd69c14c4aa96e63c096709d512",
+      "target_commit_sha": "15b6c1dcce26feb5f64d562140708f7cb27390aa",
+      "release_api_identity_digest": "sha256:1b393ac617b3a2c659b0c789118bf9779ac8e1e4caa58fe60794c49634c068c4",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "evidence-v0.1.1.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-semantic-drift-guard/releases/download/v0.1.1/evidence-v0.1.1.tar.gz",
+        "digest": "sha256:83ea0adf7b59b08147eb24ef16483682d8f21d204dc93ed337d39900ae9e09ec"
+      }
+    },
+    {
+      "id": "experience-memory",
+      "repository": "kimjooyoon/gooo-experience-memory",
+      "tag": "v0.1.0",
+      "release_api_path": "repos/kimjooyoon/gooo-experience-memory/releases/tags/v0.1.0",
+      "release_id": 379896833,
+      "release_node_id": "RE_kwDOUJ9Lhc4WpMQB",
+      "tag_object_sha": "9b889fc3dd5b663b5ac1ce7cd975fc89030c4a46",
+      "target_commit_sha": "79fd6edc588ea26279dbe735e5f6e250132f7730",
+      "release_api_identity_digest": "sha256:688cb8e43ae2c540c104da7859d17f026770853e4bd502ef6b9ade9bbf7150f1",
+      "immutable": true,
+      "artifact": {
+        "kind": "release_asset",
+        "name": "gooo-experience-memory-evidence-v0.1.0.tar.gz",
+        "url": "https://github.com/kimjooyoon/gooo-experience-memory/releases/download/v0.1.0/gooo-experience-memory-evidence-v0.1.0.tar.gz",
+        "digest": "sha256:27afa525ccaa5ebdf738fef99615998b51bed85d865ccd6e9367036a46a961f6"
+      }
+    }
+  ]
+}

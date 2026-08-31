@@ -32,12 +32,25 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: Test
-        run: go test -count=1 ./...
-      - name: Build generated evaluator runner
-        run: go build -trimpath -o "$RUNNER_TEMP/self-repair" ./cmd/self-repair
-      - name: Run conformance
         run: |
-          bash scripts/conformance.sh "$RUNNER_TEMP/self-repair" "$RUNNER_TEMP/self-repair-artifacts" "$GITHUB_SHA" "$GO_VERSION"
+          /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/self-repair-test.time" \
+            go test -json -count=1 ./... > "$RUNNER_TEMP/self-repair-go-test.json"
+      - name: Build generated evaluator runner
+        run: |
+          /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/self-repair-build.time" \
+            go build -trimpath -o "$RUNNER_TEMP/self-repair" ./cmd/self-repair
+      - name: Run conformance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/conformance.sh \
+            "$RUNNER_TEMP/self-repair" \
+            "$RUNNER_TEMP/self-repair-artifacts" \
+            "$GITHUB_SHA" \
+            "$GO_VERSION" \
+            "$RUNNER_TEMP/self-repair-go-test.json" \
+            "$RUNNER_TEMP/self-repair-test.time" \
+            "$RUNNER_TEMP/self-repair-build.time"
       - name: Upload exact generated artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v5

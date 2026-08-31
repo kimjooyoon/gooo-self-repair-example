@@ -1,8 +1,8 @@
 version 0.1
 
-activity EmitCausalFrontier phase=AFTER input=independent_evaluation output=causal_frontier
-activity AuthorizeAdoption phase=AFTER input=causal_frontier output=authorized_adoption
-activity GenerateAfterEvaluator phase=AFTER input=semantic_ir output=generated_evaluator
-activity VerifyAfterFixedPoint phase=AFTER input=decision output=after_closed
-activity ReplayPriorVersion phase=REPLAY input=immutable_history output=replay_receipt
-activity InheritRepairEvidence phase=AFTER input=after_evaluator output=repair_report
+activity SelectTestFrontier phase=AFTER input=mutant_artifact output=impact_frontier
+activity ReuseVerificationEvidence phase=AFTER input=impact_frontier output=reuse_judgment
+activity VerifyIndependentOracle phase=AFTER input=reuse_judgment output=oracle_receipt
+activity SelectEvidenceFirstCandidate phase=AFTER input=oracle_receipt output=selected_candidate
+activity ApplySemanticDriftGate phase=AFTER input=selected_candidate output=drift_receipt
+activity RecordExperienceAndReplay phase=REPLAY input=drift_receipt output=second_cycle_memory

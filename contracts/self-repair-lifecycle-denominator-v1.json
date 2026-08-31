@@ -2,17 +2,17 @@
   "schema": "gooo.self-repair.lifecycle-denominator.v1",
   "denominator_cells": 12,
   "activities": [
-    {"cell": 1, "activity_id": "DeclareBeforeDecision", "source": "before.gooo"},
-    {"cell": 2, "activity_id": "GenerateBeforeEvaluator", "source": "before.gooo"},
-    {"cell": 3, "activity_id": "DetectBeforeCounterexample", "source": "before.gooo"},
-    {"cell": 4, "activity_id": "PreserveBeforeRefutation", "source": "before.gooo"},
-    {"cell": 5, "activity_id": "DeclareCandidatePatch", "source": "before.gooo"},
-    {"cell": 6, "activity_id": "IndependentlyEvaluateCandidate", "source": "before.gooo"},
-    {"cell": 7, "activity_id": "EmitCausalFrontier", "source": "after.gooo"},
-    {"cell": 8, "activity_id": "AuthorizeAdoption", "source": "after.gooo"},
-    {"cell": 9, "activity_id": "GenerateAfterEvaluator", "source": "after.gooo"},
-    {"cell": 10, "activity_id": "VerifyAfterFixedPoint", "source": "after.gooo"},
-    {"cell": 11, "activity_id": "ReplayPriorVersion", "source": "after.gooo"},
-    {"cell": 12, "activity_id": "InheritRepairEvidence", "source": "after.gooo"}
+    {"cell": 1, "activity_id": "ObserveMeaningDefect", "source": "before.gooo"},
+    {"cell": 2, "activity_id": "GenerateImprovementCandidate", "source": "before.gooo"},
+    {"cell": 3, "activity_id": "BoundSemanticMutation", "source": "before.gooo"},
+    {"cell": 4, "activity_id": "PreserveUnknownResolution", "source": "before.gooo"},
+    {"cell": 5, "activity_id": "DetectBeforeCounterexample", "source": "before.gooo"},
+    {"cell": 6, "activity_id": "RecordBeforeHistory", "source": "before.gooo"},
+    {"cell": 7, "activity_id": "SelectTestFrontier", "source": "after.gooo"},
+    {"cell": 8, "activity_id": "ReuseVerificationEvidence", "source": "after.gooo"},
+    {"cell": 9, "activity_id": "VerifyIndependentOracle", "source": "after.gooo"},
+    {"cell": 10, "activity_id": "SelectEvidenceFirstCandidate", "source": "after.gooo"},
+    {"cell": 11, "activity_id": "ApplySemanticDriftGate", "source": "after.gooo"},
+    {"cell": 12, "activity_id": "RecordExperienceAndReplay", "source": "after.gooo"}
   ]
 }

@@ -17,9 +17,32 @@ func main() {
 		compile(os.Args[2:])
 	case "evaluate":
 		evaluate(os.Args[2:])
+	case "integrate":
+		integrate(os.Args[2:])
 	default:
 		fail("unknown command %q", os.Args[1])
 	}
+}
+
+func integrate(args []string) {
+	flags := flag.NewFlagSet("integrate", flag.ExitOnError)
+	options := repair.EvaluateOptions{}
+	flags.StringVar(&options.BeforeSource, "before-source", "", "BEFORE .gooo source")
+	flags.StringVar(&options.AfterSource, "after-source", "", "AFTER .gooo source")
+	flags.StringVar(&options.Contract, "contract", "", "lifecycle contract")
+	flags.StringVar(&options.IR, "ir", "", "semantic IR")
+	input := flags.String("external-inputs", "", "digest-verified external release observations")
+	flags.StringVar(&options.ArtifactDir, "artifact-dir", "", "empty artifact directory")
+	flags.StringVar(&options.SubjectSHA, "subject-sha", "", "subject revision")
+	flags.StringVar(&options.GoVersion, "go-version", "", "CI Go version")
+	flags.Parse(args)
+	if *input == "" {
+		fail("integrate: --external-inputs is required")
+	}
+	if err := repair.Integrate(options, *input); err != nil {
+		fail("integrate: %v", err)
+	}
+	fmt.Println("self-repair integration complete")
 }
 
 func compile(args []string) {
