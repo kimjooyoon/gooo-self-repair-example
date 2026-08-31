@@ -270,8 +270,8 @@ jq -e '
   (.external_releases|length) == 8 and .external_utility.state == "UNKNOWN"
 ' "$artifact_dir/repair-manifest.json" >/dev/null
 jq -e -s '
-  length == 9 and (map(.state) | sort | join(",")) == "CLOSED,CLOSED,CLOSED,REFUTED,REFUTED,REFUTED,UNKNOWN,UNKNOWN,UNKNOWN" and
-  all(.[] | if .state == "UNKNOWN" then .unknown.stage != "" and .unknown.step != "" and .unknown.reason != "" and .unknown.unknown_class != "" and .unknown.next_operation != "" and (.unknown.blocked_by|type) == "array" else true end)
+  length == 9 and ([.[].state] | sort | join(",")) == "CLOSED,CLOSED,CLOSED,REFUTED,REFUTED,REFUTED,UNKNOWN,UNKNOWN,UNKNOWN" and
+  all(.[]; if .state == "UNKNOWN" then .unknown.stage != "" and .unknown.step != "" and .unknown.reason != "" and .unknown.unknown_class != "" and .unknown.next_operation != "" and (.unknown.blocked_by|type) == "array" else true end)
 ' "$artifact_dir/claims.ndjson" >/dev/null
 jq -e '.decision == "CONFORMANCE_CLOSED" and .selected_candidate.state == "CLOSED" and .claims == {CLOSED:3,UNKNOWN:3,REFUTED:3} and .external_utility.state == "UNKNOWN" and (.lifecycle|length) == 10' "$artifact_dir/cycle-receipt.json" >/dev/null
 if grep -R -n -E -i 'percentage|percent|aggregate_score|"score"|average' "$artifact_dir"; then
