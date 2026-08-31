@@ -1,0 +1,8 @@
+version 0.1
+
+activity EmitCausalFrontier phase=AFTER input=independent_evaluation output=causal_frontier
+activity AuthorizeAdoption phase=AFTER input=causal_frontier output=authorized_adoption
+activity GenerateAfterEvaluator phase=AFTER input=semantic_ir output=generated_evaluator
+activity VerifyAfterFixedPoint phase=AFTER input=decision output=after_closed
+activity ReplayPriorVersion phase=REPLAY input=immutable_history output=replay_receipt
+activity InheritRepairEvidence phase=AFTER input=after_evaluator output=repair_report

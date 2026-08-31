@@ -1,0 +1,9 @@
+{
+  "schema": "gooo.proof-kernel.fixture.v1",
+  "fixture_id": "proof-kernel-v1",
+  "immutable": true,
+  "rule": "only-explicit-fixed-point-closes",
+  "unknown_decision": "FAIL_CLOSED",
+  "feedback_code": "FEEDBACK_COVERAGE_DECISION_UNKNOWN",
+  "fixture_digest": "sha256:d362932ba124135b9f00c4d0e1a83cbd886bddc537cd1350433ab4c664ff1b9c"
+}

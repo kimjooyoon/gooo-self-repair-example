@@ -1,0 +1,8 @@
+{
+  "schema": "gooo.parent-evaluator.fixture.v1",
+  "fixture_id": "parent-evaluator-v1",
+  "immutable": true,
+  "algorithm": "exact-decision-v1",
+  "authority": "independent-parent-evaluator",
+  "fixture_digest": "sha256:970b61bcee6e5ed1464c232fb543a4425d801a4dddd2c028064ff8bf1e9668be"
+}

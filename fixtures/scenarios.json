@@ -1,0 +1,17 @@
+{
+  "schema": "gooo.self-repair.scenario-corpus.v1",
+  "cases": [
+    {"case_id":"before-normal-01","phase":"BEFORE","kind":"NORMAL","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"none","expected_final_state":"CLOSED"},
+    {"case_id":"before-normal-02","phase":"BEFORE","kind":"NORMAL","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"none","expected_final_state":"CLOSED"},
+    {"case_id":"before-counterexample-01","phase":"BEFORE","kind":"COUNTEREXAMPLE","before_decision":"NOT_FIXED_POINT","after_decision":"FIXED_POINT","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"REFUTED"},
+    {"case_id":"before-counterexample-02","phase":"BEFORE","kind":"COUNTEREXAMPLE","before_decision":"RETRY_LATER","after_decision":"FIXED_POINT","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"REFUTED"},
+    {"case_id":"before-counterexample-03","phase":"BEFORE","kind":"COUNTEREXAMPLE","before_decision":"EXTERNAL_UNKNOWN","after_decision":"FIXED_POINT","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"REFUTED"},
+    {"case_id":"after-normal-01","phase":"AFTER","kind":"NORMAL","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"after-normal-02","phase":"AFTER","kind":"NORMAL","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"after-normal-03","phase":"AFTER","kind":"NORMAL","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"after-defense-01","phase":"AFTER","kind":"DEFENSE","before_decision":"FIXED_POINT","after_decision":"UNKNOWN_TOP_LEVEL","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"after-defense-02","phase":"AFTER","kind":"DEFENSE","before_decision":"FIXED_POINT","after_decision":"DECISION_NOT_PROVIDED","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"after-defense-03","phase":"AFTER","kind":"DEFENSE","before_decision":"FIXED_POINT","after_decision":"MAYBE_FIXED_POINT","truth":"UNKNOWN","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"},
+    {"case_id":"replay-01","phase":"REPLAY","kind":"REPLAY","before_decision":"FIXED_POINT","after_decision":"FIXED_POINT","truth":"FIXED_POINT","candidate_patch_id":"candidate-decision-guard","expected_final_state":"CLOSED"}
+  ]
+}
