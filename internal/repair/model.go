@@ -72,16 +72,17 @@ type CaseResult struct {
 }
 
 type ClaimRecord struct {
-	RecordType    string       `json:"record_type"`
-	CaseID        string       `json:"case_id"`
-	Phase         string       `json:"phase"`
-	Kind          string       `json:"kind"`
-	Sequence      int          `json:"sequence"`
-	FinalState    string       `json:"final_state"`
-	BeforeOutcome string       `json:"before_outcome"`
-	AfterOutcome  string       `json:"after_outcome"`
-	Lifecycle     []Transition `json:"lifecycle"`
-	RecordDigest  string       `json:"record_digest"`
+	RecordType                string       `json:"record_type"`
+	CaseID                    string       `json:"case_id"`
+	Phase                     string       `json:"phase"`
+	Kind                      string       `json:"kind"`
+	Sequence                  int          `json:"sequence"`
+	FinalState                string       `json:"final_state"`
+	BeforeOutcome             string       `json:"before_outcome"`
+	AfterOutcome              string       `json:"after_outcome"`
+	ExpectedRefutationReceipt bool         `json:"expected_refutation_receipt"`
+	Lifecycle                 []Transition `json:"lifecycle"`
+	RecordDigest              string       `json:"record_digest"`
 }
 
 type CounterexampleRecord struct {

@@ -144,15 +144,16 @@ func Evaluate(options EvaluateOptions) error {
 		}
 		results = append(results, result)
 		claim := ClaimRecord{
-			RecordType:    "CLAIM",
-			CaseID:        scenario.CaseID,
-			Phase:         scenario.Phase,
-			Kind:          scenario.Kind,
-			Sequence:      len(claims) + 1,
-			FinalState:    finalState,
-			BeforeOutcome: before.Outcome,
-			AfterOutcome:  after.Outcome,
-			Lifecycle:     lifecycle,
+			RecordType:                "CLAIM",
+			CaseID:                    scenario.CaseID,
+			Phase:                     scenario.Phase,
+			Kind:                       scenario.Kind,
+			Sequence:                  len(claims) + 1,
+			FinalState:                finalState,
+			BeforeOutcome:             before.Outcome,
+			AfterOutcome:              after.Outcome,
+			ExpectedRefutationReceipt: isCounterexample,
+			Lifecycle:                 lifecycle,
 		}
 		claim.RecordDigest = claimDigest(claim)
 		claims = append(claims, claim)
