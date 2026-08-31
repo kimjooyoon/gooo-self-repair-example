@@ -31,3 +31,15 @@ jobs:
             "gooo-self-repair-example-${GITHUB_REF_NAME#v}.tar.gz" \
             SHA256SUMS release-manifest.json \
             --verify-tag --title "$GITHUB_REF_NAME" --notes "Immutable self-repair execution source release."
+      - name: Verify immutable release API receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME")
+          test "$(jq -r '.tag_name' <<<"$release")" = "$GITHUB_REF_NAME"
+          test "$(jq -r '.immutable' <<<"$release")" = true
+          for asset in "gooo-self-repair-example-${GITHUB_REF_NAME#v}.tar.gz" SHA256SUMS release-manifest.json; do
+            expected="sha256:$(sha256sum "$asset" | awk '{print $1}')"
+            actual=$(jq -r --arg name "$asset" '.assets[] | select(.name == $name) | .digest' <<<"$release")
+            test "$actual" = "$expected"
+          done

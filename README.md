@@ -1,9 +1,17 @@
 # gooo-self-repair-example
 
-An executable, append-only example of a self-repair loop with a fixed counterexample.
+An executable, append-only example of a Gooo self-repair cycle that closes one real semantic defect:
 
-The example compiles two `.gooo` sources into semantic IR, runs a generated BEFORE and AFTER evaluator over exactly twelve cases, and emits a human-readable report plus machine-readable receipts. The BEFORE evaluator intentionally contains the meaning bug: an unknown top-level decision is treated as `FIXED_POINT`. The AFTER evaluator accepts only the explicit `FIXED_POINT` decision and otherwise returns `FAIL_CLOSED` with `FEEDBACK_COVERAGE_DECISION_UNKNOWN`.
+> an unknown top-level decision must not be hidden as `FIXED_POINT`; it resolves to `FAIL_CLOSED` while preserving the full `UNKNOWN` reason tuple.
 
-Three BEFORE counterexamples are retained as historical `REFUTED` cases while their append-only lifecycle continues through `CANDIDATE`, `INDEPENDENT_EVALUATION`, `AUTHORIZED_ADOPTION`, and `AFTER_CLOSED`. The generated evaluator is bound to immutable parent evaluator and proof-kernel fixtures, so it cannot establish its own correctness.
+The GitHub Actions conformance job runs the complete chain:
 
-All Go commands run in GitHub Actions only. The conformance job uses a caller-owned temporary fixture and never writes to another repository.
+`observation → Gooo candidate → bounded semantic mutation → impact test frontier → verification reuse → independent oracle → evidence-first selection → semantic drift gate → experience memory → second cycle`
+
+The contract keeps one fixed denominator of twelve Gooo activities and a nine-claim receipt matrix with exactly three `CLOSED`, three `UNKNOWN`, and three historical `REFUTED` claims. Every `UNKNOWN` claim carries `stage`, `step`, `reason`, `unknown_class`, `next_operation`, and `blocked_by`. `REFUTED` has precedence over `UNKNOWN`, which has precedence over `CLOSED`.
+
+External inputs are consumed only from the pinned GitHub release API records in [`contracts/external-release-lock-v1.json`](contracts/external-release-lock-v1.json). Each release is checked by API identity, annotated-tag resolution, immutability, and selected artifact digest before its evidence is trusted. The external utility pair is exact but remains `UNKNOWN` when its resource axes cross; the core semantic repair is `CLOSED` only because its independent oracle and repaired evaluator agree directly.
+
+CI uses Go 1.27 and records exact integer build/test/conformance wall time, peak RSS, test totals and observation categories, Go/Gooo file and line counts, and repository writes. No local Go test execution is part of the authority boundary. The conformance run writes eleven receipts/report files to a caller-owned temporary artifact directory and verifies that the repository working tree is unchanged.
+
+The historical `evaluate` command and its original fixture remain available for comparison. The current release path is the `integrate` command invoked by [`scripts/conformance.sh`](scripts/conformance.sh).

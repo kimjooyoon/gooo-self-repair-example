@@ -1,8 +1,8 @@
 version 0.1
 
-activity DeclareBeforeDecision phase=BEFORE input=decision output=before_state
-activity GenerateBeforeEvaluator phase=BEFORE input=semantic_ir output=generated_evaluator
-activity DetectBeforeCounterexample phase=BEFORE input=unknown_decision output=before_refutation
-activity PreserveBeforeRefutation phase=BEFORE input=counterexample output=append_only_history
-activity DeclareCandidatePatch phase=BEFORE input=refutation output=candidate
-activity IndependentlyEvaluateCandidate phase=BEFORE input=candidate output=independent_evaluation
+activity ObserveMeaningDefect phase=BEFORE input=runtime_observation output=counterexample
+activity GenerateImprovementCandidate phase=BEFORE input=counterexample output=candidate
+activity BoundSemanticMutation phase=BEFORE input=candidate output=mutant_artifact
+activity PreserveUnknownResolution phase=BEFORE input=unresolved_decision output=unknown_tuple
+activity DetectBeforeCounterexample phase=BEFORE input=unknown_tuple output=before_refutation
+activity RecordBeforeHistory phase=BEFORE input=before_refutation output=append_only_history
