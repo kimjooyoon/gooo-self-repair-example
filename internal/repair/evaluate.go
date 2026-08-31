@@ -39,19 +39,19 @@ type Metrics struct {
 }
 
 type EvaluateOptions struct {
-	BeforeSource   string
-	AfterSource    string
-	Contract       string
-	IR             string
-	Cases          string
-	ParentFixture  string
-	ProofFixture   string
-	GeneratedGo    string
-	Evaluator      string
-	ArtifactDir    string
-	SubjectSHA     string
-	GoVersion      string
-	Metrics        Metrics
+	BeforeSource  string
+	AfterSource   string
+	Contract      string
+	IR            string
+	Cases         string
+	ParentFixture string
+	ProofFixture  string
+	GeneratedGo   string
+	Evaluator     string
+	ArtifactDir   string
+	SubjectSHA    string
+	GoVersion     string
+	Metrics       Metrics
 }
 
 func Evaluate(options EvaluateOptions) error {
@@ -88,13 +88,13 @@ func Evaluate(options EvaluateOptions) error {
 	}
 
 	patch := map[string]any{
-		"schema":        "gooo.self-repair.candidate-patch.v1",
-		"candidate_id":  "candidate-decision-guard",
-		"change":        "unknown-decisions-fail-closed",
-		"guard":        "decision == FIXED_POINT",
-		"applies_to":   "after-evaluator",
+		"schema":         "gooo.self-repair.candidate-patch.v1",
+		"candidate_id":   "candidate-decision-guard",
+		"change":         "unknown-decisions-fail-closed",
+		"guard":          "decision == FIXED_POINT",
+		"applies_to":     "after-evaluator",
 		"proof_boundary": "parent-evaluator-and-proof-kernel",
-		"patch_digest":  "",
+		"patch_digest":   "",
 	}
 	patchDigest, err := DigestCanonical(patch)
 	if err != nil {
@@ -180,44 +180,44 @@ func Evaluate(options EvaluateOptions) error {
 	}
 
 	provenance := map[string]any{
-		"before_source_digest":         ir.BeforeSourceDigest,
-		"after_source_digest":          ir.AfterSourceDigest,
-		"semantic_ir_digest":           irDigest,
-		"generated_go_digest":           generatedGoDigest,
-		"evaluator_digest":              evaluatorDigest,
-		"scenario_corpus_digest":        corpusDigest,
+		"before_source_digest":            ir.BeforeSourceDigest,
+		"after_source_digest":             ir.AfterSourceDigest,
+		"semantic_ir_digest":              irDigest,
+		"generated_go_digest":             generatedGoDigest,
+		"evaluator_digest":                evaluatorDigest,
+		"scenario_corpus_digest":          corpusDigest,
 		"parent_evaluator_fixture_digest": parentDigest,
-		"proof_kernel_fixture_digest":   proofDigest,
-		"candidate_patch_digest":        patchDigest,
+		"proof_kernel_fixture_digest":     proofDigest,
+		"candidate_patch_digest":          patchDigest,
 	}
 	evaluatorReceipt := map[string]any{
 		"schema":                         "gooo.self-repair.evaluator-receipt.v1",
-		"generated_version":               generated.GeneratedVersion,
+		"generated_version":              generated.GeneratedVersion,
 		"before_rule":                    "unknown top-level decisions were incorrectly treated as FIXED_POINT",
 		"after_rule":                     "only explicit FIXED_POINT closes; all other decisions fail closed",
-		"unknown_feedback_code":           "FEEDBACK_COVERAGE_DECISION_UNKNOWN",
-		"expected_before_refutations":     3,
-		"independent_parent_binding":      true,
-		"hash_or_replay_alone_can_close":  false,
-		"provenance":                      provenance,
+		"unknown_feedback_code":          "FEEDBACK_COVERAGE_DECISION_UNKNOWN",
+		"expected_before_refutations":    3,
+		"independent_parent_binding":     true,
+		"hash_or_replay_alone_can_close": false,
+		"provenance":                     provenance,
 	}
 	adoptionReceipt := map[string]any{
-		"schema":                    "gooo.self-repair.adoption-receipt.v1",
-		"candidate_id":              "candidate-decision-guard",
-		"authorization":             "AUTHORIZED_ADOPTION",
-		"independent_evaluation":    "INDEPENDENT_EVALUATION",
+		"schema":                      "gooo.self-repair.adoption-receipt.v1",
+		"candidate_id":                "candidate-decision-guard",
+		"authorization":               "AUTHORIZED_ADOPTION",
+		"independent_evaluation":      "INDEPENDENT_EVALUATION",
 		"retained_before_refutations": 3,
-		"after_closed_cases":         9,
-		"patch_digest":               patchDigest,
-		"provenance":                 provenance,
+		"after_closed_cases":          9,
+		"patch_digest":                patchDigest,
+		"provenance":                  provenance,
 	}
 	replayReceipt := map[string]any{
-		"schema":                  "gooo.self-repair.replay-receipt.v1",
+		"schema":                 "gooo.self-repair.replay-receipt.v1",
 		"case_id":                "replay-01",
 		"replayed_from":          "immutable-before-history",
 		"replay_can_close_alone": false,
-		"result":                  "CLOSED",
-		"provenance":              provenance,
+		"result":                 "CLOSED",
+		"provenance":             provenance,
 	}
 
 	claimsPath := filepath.Join(options.ArtifactDir, "claims.ndjson")
@@ -257,9 +257,9 @@ func Evaluate(options EvaluateOptions) error {
 		artifactDigests[name] = digest
 	}
 	manifest := map[string]any{
-		"schema":             "gooo.self-repair.repair-manifest.v1",
-		"subject_sha":        options.SubjectSHA,
-		"go_version":         options.GoVersion,
+		"schema":      "gooo.self-repair.repair-manifest.v1",
+		"subject_sha": options.SubjectSHA,
+		"go_version":  options.GoVersion,
 		"contracts": map[string]any{
 			"denominator_cells":        12,
 			"released_gooo_activities": len(ir.Activities),
@@ -272,18 +272,18 @@ func Evaluate(options EvaluateOptions) error {
 			"UNKNOWN": countState(results, StateUnknown),
 		},
 		"case_kinds": map[string]int{
-			"BEFORE_NORMAL":        countKind(results, "BEFORE", "NORMAL"),
+			"BEFORE_NORMAL":         countKind(results, "BEFORE", "NORMAL"),
 			"BEFORE_COUNTEREXAMPLE": countKind(results, "BEFORE", "COUNTEREXAMPLE"),
-			"AFTER_NORMAL":         countKind(results, "AFTER", "NORMAL"),
-			"AFTER_DEFENSE":        countKind(results, "AFTER", "DEFENSE"),
-			"REPLAY":               countKind(results, "REPLAY", "REPLAY"),
+			"AFTER_NORMAL":          countKind(results, "AFTER", "NORMAL"),
+			"AFTER_DEFENSE":         countKind(results, "AFTER", "DEFENSE"),
+			"REPLAY":                countKind(results, "REPLAY", "REPLAY"),
 		},
 		"provenance":       provenance,
 		"artifacts":        artifactNames,
 		"artifact_digests": artifactDigests,
 		"authority": map[string]int{
-			"repository_writes":         options.Metrics.RepositoryWrites,
-			"local_test_executions":     options.Metrics.LocalTestExecutions,
+			"repository_writes":            options.Metrics.RepositoryWrites,
+			"local_test_executions":        options.Metrics.LocalTestExecutions,
 			"cross_project_required_gates": options.Metrics.CrossProjectGates,
 		},
 		"inventory": map[string]any{
