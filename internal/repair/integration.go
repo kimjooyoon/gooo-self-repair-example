@@ -57,28 +57,28 @@ type ReleaseEvidence struct {
 
 type DevelopmentAuthorityReceipt struct {
 	Schema                           string   `json:"schema"`
-	DirectMainPush                  int      `json:"direct_main_push"`
-	OffendingCommit                 string   `json:"offending_commit"`
-	ExpectedPRAssociation           string   `json:"expected_pr_association"`
-	State                           string   `json:"state"`
-	Stage                           string   `json:"stage"`
-	Step                            string   `json:"step"`
-	Reason                          string   `json:"reason"`
-	UnknownClass                    string   `json:"unknown_class"`
-	NextOperation                  string   `json:"next_operation"`
-	BlockedBy                       []string `json:"blocked_by"`
-	HistoricalViolationCount        int      `json:"historical_violation_count"`
-	CurrentGuardState               string   `json:"current_guard_state"`
-	CurrentCommit                   string   `json:"current_commit"`
-	CurrentPRAssociatedPath         int      `json:"current_pr_associated_path"`
-	CurrentPRNumber                 int      `json:"current_pr_number"`
-	CurrentMergeCommitSHA           string   `json:"current_merge_commit_sha"`
-	RepositoryDirectWritesAfterGuard int     `json:"repository_direct_writes_after_guard"`
+	DirectMainPush                   int      `json:"direct_main_push"`
+	OffendingCommit                  string   `json:"offending_commit"`
+	ExpectedPRAssociation            string   `json:"expected_pr_association"`
+	State                            string   `json:"state"`
+	Stage                            string   `json:"stage"`
+	Step                             string   `json:"step"`
+	Reason                           string   `json:"reason"`
+	UnknownClass                     string   `json:"unknown_class"`
+	NextOperation                    string   `json:"next_operation"`
+	BlockedBy                        []string `json:"blocked_by"`
+	HistoricalViolationCount         int      `json:"historical_violation_count"`
+	CurrentGuardState                string   `json:"current_guard_state"`
+	CurrentCommit                    string   `json:"current_commit"`
+	CurrentPRAssociatedPath          int      `json:"current_pr_associated_path"`
+	CurrentPRNumber                  int      `json:"current_pr_number"`
+	CurrentMergeCommitSHA            string   `json:"current_merge_commit_sha"`
+	RepositoryDirectWritesAfterGuard int      `json:"repository_direct_writes_after_guard"`
 	SemanticArtifactsState           string   `json:"semantic_artifacts_state"`
-	V020ReleaseTag                  string   `json:"v020_release_tag"`
-	V020ReleaseImmutable            bool     `json:"v020_release_immutable"`
-	V020ReleaseAPIIdentityDigest    string   `json:"v020_release_api_identity_digest"`
-	V020ReleaseAssetCount           int      `json:"v020_release_asset_count"`
+	V020ReleaseTag                   string   `json:"v020_release_tag"`
+	V020ReleaseImmutable             bool     `json:"v020_release_immutable"`
+	V020ReleaseAPIIdentityDigest     string   `json:"v020_release_api_identity_digest"`
+	V020ReleaseAssetCount            int      `json:"v020_release_asset_count"`
 }
 
 type ObservationEvidence struct {
@@ -199,25 +199,25 @@ type IntegrationMetrics struct {
 }
 
 type IntegrationInput struct {
-	Schema           string              `json:"schema"`
-	DenominatorCells int                 `json:"denominator_cells"`
-	StateCounts      map[string]int      `json:"state_counts"`
-	Precedence       []string            `json:"precedence"`
-	Releases         []ReleaseEvidence   `json:"releases"`
+	Schema               string                      `json:"schema"`
+	DenominatorCells     int                         `json:"denominator_cells"`
+	StateCounts          map[string]int              `json:"state_counts"`
+	Precedence           []string                    `json:"precedence"`
+	Releases             []ReleaseEvidence           `json:"releases"`
 	DevelopmentAuthority DevelopmentAuthorityReceipt `json:"development_authority"`
-	Observation      ObservationEvidence `json:"observation"`
-	Proposal         ProposalEvidence    `json:"proposal"`
-	Mutation         MutationEvidence    `json:"mutation"`
-	Selection        SelectionEvidence   `json:"selection"`
-	Frontier         FrontierEvidence    `json:"frontier"`
-	Reuse            ReuseEvidence       `json:"reuse"`
-	Oracle           OracleEvidence      `json:"oracle"`
-	OracleNegative   OracleEvidence      `json:"oracle_negative"`
-	Drift            DriftEvidence       `json:"drift"`
-	DriftNegative    DriftEvidence       `json:"drift_negative"`
-	Experience       ExperienceEvidence  `json:"experience"`
-	Utility          UtilityPair         `json:"utility"`
-	Metrics          IntegrationMetrics  `json:"metrics"`
+	Observation          ObservationEvidence         `json:"observation"`
+	Proposal             ProposalEvidence            `json:"proposal"`
+	Mutation             MutationEvidence            `json:"mutation"`
+	Selection            SelectionEvidence           `json:"selection"`
+	Frontier             FrontierEvidence            `json:"frontier"`
+	Reuse                ReuseEvidence               `json:"reuse"`
+	Oracle               OracleEvidence              `json:"oracle"`
+	OracleNegative       OracleEvidence              `json:"oracle_negative"`
+	Drift                DriftEvidence               `json:"drift"`
+	DriftNegative        DriftEvidence               `json:"drift_negative"`
+	Experience           ExperienceEvidence          `json:"experience"`
+	Utility              UtilityPair                 `json:"utility"`
+	Metrics              IntegrationMetrics          `json:"metrics"`
 }
 
 type IntegrationClaim struct {
