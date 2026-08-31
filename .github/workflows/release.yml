@@ -25,6 +25,8 @@ jobs:
           git archive --format=tar.gz --prefix="gooo-self-repair-example-${GITHUB_REF_NAME#v}/" -o "gooo-self-repair-example-${GITHUB_REF_NAME#v}.tar.gz" "$GITHUB_SHA"
           sha256sum "gooo-self-repair-example-${GITHUB_REF_NAME#v}.tar.gz" > SHA256SUMS
           printf '{"schema":"gooo.self-repair.release-manifest.v1","tag":"%s","commit":"%s","immutable":true}\n' "$GITHUB_REF_NAME" "$GITHUB_SHA" > release-manifest.json
+          test "$(jq -r '.tag' release-manifest.json)" = "$GITHUB_REF_NAME"
+          test "$(jq -r '.commit' release-manifest.json)" = "$GITHUB_SHA"
       - name: Create immutable release
         env:
           GH_TOKEN: ${{ github.token }}
