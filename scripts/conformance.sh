@@ -25,11 +25,11 @@ files=$(wc -l < "$file_list" | tr -d ' ')
 directories=$(find "$repo_root" -type d -not -path "$repo_root/.git/*" -not -path "$repo_root/.git" -print | wc -l | tr -d ' ')
 physical_lines=$(count_lines < "$file_list")
 go_file_list=$(mktemp)
-rg --files -g '*.go' "$repo_root" | sort > "$go_file_list"
+find "$repo_root" -type f -name '*.go' -not -path "$repo_root/.git/*" -print | sort > "$go_file_list"
 go_files=$(wc -l < "$go_file_list" | tr -d ' ')
 go_lines=$(count_lines < "$go_file_list")
 gooo_file_list=$(mktemp)
-rg --files -g '*.gooo' "$repo_root" | sort > "$gooo_file_list"
+find "$repo_root" -type f -name '*.gooo' -not -path "$repo_root/.git/*" -print | sort > "$gooo_file_list"
 gooo_files=$(wc -l < "$gooo_file_list" | tr -d ' ')
 gooo_lines=$(count_lines < "$gooo_file_list")
 
@@ -102,7 +102,7 @@ jq -e '
 jq -e -s 'length == 12 and all(.[] | select(.kind == "COUNTEREXAMPLE"); .expected_refutation_receipt == true and .final_state == "REFUTED" and .before_outcome == "CLOSED" and (.lifecycle | map(.state) | join(">") == "BEFORE_REFUTED>CANDIDATE>INDEPENDENT_EVALUATION>AUTHORIZED_ADOPTION>AFTER_CLOSED"))' "$artifact_dir/claims.ndjson" >/dev/null
 jq -e -s 'length == 3 and all(.[]; .kind == "DEFENSE" and .after_outcome == "FAIL_CLOSED")' <(jq -c 'select(.kind == "DEFENSE")' "$artifact_dir/claims.ndjson") >/dev/null
 jq -e -s 'length == 3 and (.[0].previous_record_digest == "") and all(.[]; .record_type == "BEFORE_COUNTEREXAMPLE")' "$artifact_dir/counterexamples.ndjson" >/dev/null
-if rg -n -i 'percentage|percent|aggregate_score|"score"' "$artifact_dir"; then
+if grep -R -n -E -i 'percentage|percent|aggregate_score|"score"' "$artifact_dir"; then
   echo "forbidden aggregate or percentage output" >&2
   exit 1
 fi

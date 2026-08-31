@@ -24,6 +24,9 @@ func TestArtifactContractNames(t *testing.T) {
 }
 
 func TestGeneratedEvaluatorBoundary(t *testing.T) {
+	if generated.AfterEvaluate("FIXED_POINT").Outcome != StateClosed {
+		t.Fatal("AFTER evaluator rejected the only semantic close decision")
+	}
 	if generated.BeforeEvaluate("UNKNOWN").Outcome != StateClosed {
 		t.Fatal("BEFORE regression fixture no longer exposes the historical bug")
 	}
