@@ -436,14 +436,14 @@ func validateIntegrationInput(input IntegrationInput) error {
 	}
 	seen := map[string]bool{}
 	expectedIDs := map[string]bool{
-		"improvement-proposer":   true,
+		"improvement-proposer":  true,
 		"semantic-mutation-lab": true,
-		"improvement-selector":   true,
-		"proof-kernel-boundary":  true,
-		"test-frontier":          true,
-		"verification-reuse":     true,
-		"semantic-drift-guard":   true,
-		"experience-memory":      true,
+		"improvement-selector":  true,
+		"proof-kernel-boundary": true,
+		"test-frontier":         true,
+		"verification-reuse":    true,
+		"semantic-drift-guard":  true,
+		"experience-memory":     true,
 	}
 	for _, release := range input.Releases {
 		if release.ID == "" || !expectedIDs[release.ID] || seen[release.ID] || release.Repository == "" || release.Tag == "" || release.ReleaseAPIPath == "" || release.ReleaseID <= 0 || release.ReleaseNodeID == "" || release.TagObjectSHA == "" || release.TargetCommitSHA == "" || !validDigest(release.ReleaseAPIIdentityDigest) || release.ArtifactKind == "" || release.ArtifactName == "" || release.ArtifactURL == "" || !validDigest(release.ArtifactDigest) || release.ObservedArtifactDigest != release.ArtifactDigest || !release.Immutable {
