@@ -14,6 +14,7 @@ const integrationSchema = "gooo/self-repair/integration-input/v1"
 
 var integrationArtifactNames = []string{
 	"release-input-receipt.json",
+	"development-authority-receipt.json",
 	"candidate-receipt.json",
 	"mutation-receipt.json",
 	"frontier-receipt.json",
@@ -52,6 +53,32 @@ type ReleaseEvidence struct {
 	ObservedArtifactDigest   string `json:"observed_artifact_digest"`
 	ArtifactPath             string `json:"artifact_path"`
 	Immutable                bool   `json:"immutable"`
+}
+
+type DevelopmentAuthorityReceipt struct {
+	Schema                           string   `json:"schema"`
+	DirectMainPush                   int      `json:"direct_main_push"`
+	OffendingCommit                  string   `json:"offending_commit"`
+	ExpectedPRAssociation            string   `json:"expected_pr_association"`
+	State                            string   `json:"state"`
+	Stage                            string   `json:"stage"`
+	Step                             string   `json:"step"`
+	Reason                           string   `json:"reason"`
+	UnknownClass                     string   `json:"unknown_class"`
+	NextOperation                    string   `json:"next_operation"`
+	BlockedBy                        []string `json:"blocked_by"`
+	HistoricalViolationCount         int      `json:"historical_violation_count"`
+	CurrentGuardState                string   `json:"current_guard_state"`
+	CurrentCommit                    string   `json:"current_commit"`
+	CurrentPRAssociatedPath          int      `json:"current_pr_associated_path"`
+	CurrentPRNumber                  int      `json:"current_pr_number"`
+	CurrentMergeCommitSHA            string   `json:"current_merge_commit_sha"`
+	RepositoryDirectWritesAfterGuard int      `json:"repository_direct_writes_after_guard"`
+	SemanticArtifactsState           string   `json:"semantic_artifacts_state"`
+	V020ReleaseTag                   string   `json:"v020_release_tag"`
+	V020ReleaseImmutable             bool     `json:"v020_release_immutable"`
+	V020ReleaseAPIIdentityDigest     string   `json:"v020_release_api_identity_digest"`
+	V020ReleaseAssetCount            int      `json:"v020_release_asset_count"`
 }
 
 type ObservationEvidence struct {
@@ -172,24 +199,25 @@ type IntegrationMetrics struct {
 }
 
 type IntegrationInput struct {
-	Schema           string              `json:"schema"`
-	DenominatorCells int                 `json:"denominator_cells"`
-	StateCounts      map[string]int      `json:"state_counts"`
-	Precedence       []string            `json:"precedence"`
-	Releases         []ReleaseEvidence   `json:"releases"`
-	Observation      ObservationEvidence `json:"observation"`
-	Proposal         ProposalEvidence    `json:"proposal"`
-	Mutation         MutationEvidence    `json:"mutation"`
-	Selection        SelectionEvidence   `json:"selection"`
-	Frontier         FrontierEvidence    `json:"frontier"`
-	Reuse            ReuseEvidence       `json:"reuse"`
-	Oracle           OracleEvidence      `json:"oracle"`
-	OracleNegative   OracleEvidence      `json:"oracle_negative"`
-	Drift            DriftEvidence       `json:"drift"`
-	DriftNegative    DriftEvidence       `json:"drift_negative"`
-	Experience       ExperienceEvidence  `json:"experience"`
-	Utility          UtilityPair         `json:"utility"`
-	Metrics          IntegrationMetrics  `json:"metrics"`
+	Schema               string                      `json:"schema"`
+	DenominatorCells     int                         `json:"denominator_cells"`
+	StateCounts          map[string]int              `json:"state_counts"`
+	Precedence           []string                    `json:"precedence"`
+	Releases             []ReleaseEvidence           `json:"releases"`
+	DevelopmentAuthority DevelopmentAuthorityReceipt `json:"development_authority"`
+	Observation          ObservationEvidence         `json:"observation"`
+	Proposal             ProposalEvidence            `json:"proposal"`
+	Mutation             MutationEvidence            `json:"mutation"`
+	Selection            SelectionEvidence           `json:"selection"`
+	Frontier             FrontierEvidence            `json:"frontier"`
+	Reuse                ReuseEvidence               `json:"reuse"`
+	Oracle               OracleEvidence              `json:"oracle"`
+	OracleNegative       OracleEvidence              `json:"oracle_negative"`
+	Drift                DriftEvidence               `json:"drift"`
+	DriftNegative        DriftEvidence               `json:"drift_negative"`
+	Experience           ExperienceEvidence          `json:"experience"`
+	Utility              UtilityPair                 `json:"utility"`
+	Metrics              IntegrationMetrics          `json:"metrics"`
 }
 
 type IntegrationClaim struct {
@@ -264,6 +292,19 @@ func Integrate(options EvaluateOptions, inputPath string) error {
 	}
 	if input.Utility.Decision != StateUnknown || input.Utility.DecisionReason == "" || !validUtilitySnapshot(input.Utility.Before) || !validUtilitySnapshot(input.Utility.After) {
 		return fmt.Errorf("utility pair must be exact while its cross-axis decision remains UNKNOWN")
+	}
+	developmentUnknown := UnknownCoordinate{Stage: input.DevelopmentAuthority.Stage, Step: input.DevelopmentAuthority.Step, Reason: input.DevelopmentAuthority.Reason, UnknownClass: input.DevelopmentAuthority.UnknownClass, NextOperation: input.DevelopmentAuthority.NextOperation, BlockedBy: input.DevelopmentAuthority.BlockedBy}
+	if input.DevelopmentAuthority.State != StateRefuted || input.DevelopmentAuthority.DirectMainPush != 1 || input.DevelopmentAuthority.OffendingCommit != "5dca56d" || input.DevelopmentAuthority.ExpectedPRAssociation == "" || !validUnknown(developmentUnknown) || len(input.DevelopmentAuthority.BlockedBy) != 1 || input.DevelopmentAuthority.BlockedBy[0] != "5dca56d" || input.DevelopmentAuthority.HistoricalViolationCount != 1 || input.DevelopmentAuthority.RepositoryDirectWritesAfterGuard != 0 || input.DevelopmentAuthority.SemanticArtifactsState != StateClosed || input.DevelopmentAuthority.V020ReleaseTag != "v0.2.0" || !input.DevelopmentAuthority.V020ReleaseImmutable || input.DevelopmentAuthority.V020ReleaseAssetCount != 3 || !validDigest(input.DevelopmentAuthority.V020ReleaseAPIIdentityDigest) {
+		return fmt.Errorf("development authority receipt did not preserve the historical violation and release identity")
+	}
+	if input.DevelopmentAuthority.CurrentGuardState != StateUnknown && input.DevelopmentAuthority.CurrentGuardState != StateClosed {
+		return fmt.Errorf("development authority guard state is unsupported: %s", input.DevelopmentAuthority.CurrentGuardState)
+	}
+	if input.DevelopmentAuthority.CurrentGuardState == StateClosed && (input.DevelopmentAuthority.CurrentPRAssociatedPath != 1 || input.DevelopmentAuthority.CurrentPRNumber <= 0 || input.DevelopmentAuthority.CurrentMergeCommitSHA == "") {
+		return fmt.Errorf("closed development authority guard lacks merged PR association")
+	}
+	if input.DevelopmentAuthority.CurrentGuardState == StateUnknown && input.DevelopmentAuthority.CurrentPRAssociatedPath != 0 {
+		return fmt.Errorf("unknown development authority guard cannot claim a PR association")
 	}
 	if err := prepareArtifactDir(options.ArtifactDir); err != nil {
 		return err
@@ -348,6 +389,9 @@ func Integrate(options EvaluateOptions, inputPath string) error {
 	if err := writeJSON(filepath.Join(options.ArtifactDir, "release-input-receipt.json"), releaseReceipt); err != nil {
 		return err
 	}
+	if err := writeJSON(filepath.Join(options.ArtifactDir, "development-authority-receipt.json"), input.DevelopmentAuthority); err != nil {
+		return err
+	}
 	if err := writeJSON(filepath.Join(options.ArtifactDir, "candidate-receipt.json"), candidateReceipt); err != nil {
 		return err
 	}
@@ -377,6 +421,7 @@ func Integrate(options EvaluateOptions, inputPath string) error {
 		"lifecycle":               []string{"OBSERVATION", "GOOO_CANDIDATE", "BOUNDED_SEMANTIC_MUTATION", "IMPACT_TEST_FRONTIER", "VERIFICATION_REUSE", "INDEPENDENT_ORACLE", "EVIDENCE_FIRST_SELECTION", "DRIFT_GATE", "EXPERIENCE_MEMORY", "SECOND_CYCLE"},
 		"claims":                  map[string]int{"CLOSED": 3, "UNKNOWN": 3, "REFUTED": 3},
 		"precedence":              input.Precedence,
+		"development_authority":   input.DevelopmentAuthority,
 		"unknown_contract":        []string{"stage", "step", "reason", "unknown_class", "next_operation", "blocked_by"},
 		"core_semantic_authority": StateClosed,
 		"external_utility":        map[string]any{"state": StateUnknown, "reason": input.Utility.DecisionReason, "direct_exact_pair": true},
@@ -412,6 +457,7 @@ func Integrate(options EvaluateOptions, inputPath string) error {
 		"artifacts":               integrationArtifactNames,
 		"artifact_digests":        artifactDigests,
 		"external_releases":       input.Releases,
+		"development_authority":   input.DevelopmentAuthority,
 		"metrics":                 input.Metrics,
 		"utility_pair":            input.Utility,
 		"authority":               map[string]int{"repository_writes": input.Metrics.RepositoryWrites, "local_test_executions": 0, "cross_project_required_gates": 0},
@@ -522,6 +568,7 @@ func renderIntegrationReport(input IntegrationInput, claims []IntegrationClaim, 
 	builder.WriteString("The repaired evaluator closes only an explicit `FIXED_POINT`. The historical unknown-decision acceptance remains an append-only REFUTED observation, and the second cycle records that the known refuted candidate was avoided.\n\n")
 	builder.WriteString("## Fixed contract\n\n")
 	fmt.Fprintf(&builder, "- denominator: `12/12` Gooo activities mapped `1:1`\n- claim states: `CLOSED=3`, `UNKNOWN=3`, `REFUTED=3`\n- precedence: `%s`\n- UNKNOWN fields: `stage`, `step`, `reason`, `unknown_class`, `next_operation`, `blocked_by`\n- repository writes: `%d`\n\n", strings.Join(input.Precedence, " > "), input.Metrics.RepositoryWrites)
+	fmt.Fprintf(&builder, "Development process authority: **%s** for the historical direct-main violation `%s`; historical violation count: `%d`; current PR-associated path: `%d` (`%s`); repository direct writes after guard: `%d`. Semantic artifacts remain **%s** and v0.2.0 immutable release identity remains **%s** (`%s`), independently of the process-authority verdict.\n\n", input.DevelopmentAuthority.State, input.DevelopmentAuthority.OffendingCommit, input.DevelopmentAuthority.HistoricalViolationCount, input.DevelopmentAuthority.CurrentPRAssociatedPath, input.DevelopmentAuthority.CurrentGuardState, input.DevelopmentAuthority.RepositoryDirectWritesAfterGuard, input.DevelopmentAuthority.SemanticArtifactsState, StateClosed, input.DevelopmentAuthority.V020ReleaseAPIIdentityDigest)
 	builder.WriteString("## Closed lifecycle\n\n")
 	builder.WriteString("`OBSERVATION → GOOO_CANDIDATE → BOUNDED_SEMANTIC_MUTATION → IMPACT_TEST_FRONTIER → VERIFICATION_REUSE → INDEPENDENT_ORACLE → EVIDENCE_FIRST_SELECTION → DRIFT_GATE → EXPERIENCE_MEMORY → SECOND_CYCLE`\n\n")
 	fmt.Fprintf(&builder, "Selected candidate: `%s`, second-cycle state: **%s**, known REFUTED recurrence: `%d → %d`.\n\n", input.Experience.SelectedCandidateID, input.Experience.AfterState, input.Experience.KnownRecurrencesBefore, input.Experience.KnownRecurrencesAfter)

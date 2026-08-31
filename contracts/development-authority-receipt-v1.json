@@ -1,0 +1,22 @@
+{
+  "schema": "gooo/self-repair/development-authority-receipt/v1",
+  "authority": "github-commit-pull-request-api",
+  "historical_violation": {
+    "direct_main_push": 1,
+    "offending_commit": "5dca56d",
+    "expected_pr_association": "merged pull request to main for the current commit",
+    "state": "REFUTED",
+    "unknown_fields": ["stage", "step", "reason", "unknown_class", "next_operation", "blocked_by"]
+  },
+  "current_guard": {
+    "push_main_requires": "exactly one merged pull request associated with the current commit",
+    "closed_state": "CLOSED",
+    "repository_direct_writes_after_guard": 0
+  },
+  "preserved_release": {
+    "tag": "v0.2.0",
+    "immutable": true,
+    "api_identity_digest_required": true,
+    "semantic_artifacts_state": "CLOSED"
+  }
+}
