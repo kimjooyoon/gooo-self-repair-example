@@ -37,7 +37,7 @@ jobs:
         run: go build -trimpath -o "$RUNNER_TEMP/self-repair" ./cmd/self-repair
       - name: Run conformance
         run: |
-          bash scripts/conformance.sh "$RUNNER_TEMP/self-repair" "$RUNNER_TEMP/self-repair-artifacts" "$GITHUB_SHA" "$GO_VERSION"
+          bash -x scripts/conformance.sh "$RUNNER_TEMP/self-repair" "$RUNNER_TEMP/self-repair-artifacts" "$GITHUB_SHA" "$GO_VERSION"
       - name: Upload exact generated artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v5
