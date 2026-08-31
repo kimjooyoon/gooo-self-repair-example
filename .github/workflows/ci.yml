@@ -31,6 +31,10 @@ jobs:
           fi
       - name: Vet
         run: go vet ./...
+      - name: Verify development authority
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/development-authority-guard.sh "$RUNNER_TEMP/development-authority-receipt.json"
       - name: Test
         run: |
           /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/self-repair-test.time" \
@@ -50,7 +54,8 @@ jobs:
             "$GO_VERSION" \
             "$RUNNER_TEMP/self-repair-go-test.json" \
             "$RUNNER_TEMP/self-repair-test.time" \
-            "$RUNNER_TEMP/self-repair-build.time"
+            "$RUNNER_TEMP/self-repair-build.time" \
+            "$RUNNER_TEMP/development-authority-receipt.json"
       - name: Upload exact generated artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v5

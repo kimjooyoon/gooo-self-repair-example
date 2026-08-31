@@ -14,10 +14,12 @@ The conformance run is intentionally small enough to inspect as one causal recor
 | Evidence-first selection | improvement-selector v0.1.1 evidence | crossing resource axes remain `UNKNOWN` |
 | Semantic drift | semantic-drift-guard v0.1.1 evidence | canonical positive replay closes; authority escalation remains `REFUTED` |
 | Experience memory | experience-memory v0.1.0 evidence | known refuted recurrence goes from 1 to 0 on the second cycle |
-| Output | eleven named integration artifacts | no extra generated files; repository writes remain zero |
+| Output | twelve named integration artifacts | no extra generated files; repository writes remain zero |
 
 The activity denominator is fixed at 12; the receipt matrix has a fixed claim denominator of 9: `CLOSED=3`, `UNKNOWN=3`, and `REFUTED=3`, with precedence `REFUTED > UNKNOWN > CLOSED`. Each `UNKNOWN` claim contains all six coordinates: `stage`, `step`, `reason`, `unknown_class`, `next_operation`, and `blocked_by`.
 
 The external release lock records release API identity, annotated tag object and target commit, immutability, and selected artifact digest. An exact utility pair is evidence, not authority: the pair is retained while its decision remains `UNKNOWN` if the resource axes cross and no weighting rule is present.
+
+The development-authority receipt preserves the historical direct-main violation at `5dca56d` as `REFUTED`, including all six `UNKNOWN` coordinates. It separately records the current PR-associated path (`UNKNOWN` before merge, `CLOSED` on the post-merge `main` push), the v0.2.0 immutable release API identity, and zero repository direct writes after the guard.
 
 The parent evaluator and proof-kernel fixtures are separate immutable inputs. Their digests are pinned in the generated evaluator and checked before any legacy case result is trusted. The repaired evaluator closes only an explicit `FIXED_POINT`; hashes and replay evidence cannot close it alone.

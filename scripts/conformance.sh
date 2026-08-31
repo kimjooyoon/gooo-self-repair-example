@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-if test "$#" -ne 7; then
-  echo "usage: conformance.sh BINARY ARTIFACT_DIR SUBJECT_SHA GO_VERSION TEST_JSON TEST_TIME BUILD_TIME" >&2
+if test "$#" -ne 8; then
+  echo "usage: conformance.sh BINARY ARTIFACT_DIR SUBJECT_SHA GO_VERSION TEST_JSON TEST_TIME BUILD_TIME DEVELOPMENT_AUTHORITY_JSON" >&2
   exit 64
 fi
 
@@ -13,6 +13,7 @@ go_version=$4
 go_test_json=$5
 test_time=$6
 build_time=$7
+development_authority=$8
 repo_root=$(cd "$(dirname "$0")/.." && pwd)
 lock="$repo_root/contracts/external-release-lock-v1.json"
 work=$(mktemp -d "${RUNNER_TEMP:-/tmp}/gooo-self-repair.XXXXXX")
@@ -21,6 +22,7 @@ trap 'rm -rf "$work"' EXIT
 before_status=$(git -C "$repo_root" status --porcelain=v1 -z --untracked-files=all | sha256sum | awk '{print $1}')
 conformance_start_ns=$(date +%s%N)
 mkdir -p "$work/api" "$work/downloads" "$work/evidence"
+test -s "$development_authority"
 
 "$binary" compile \
   --before-source "$repo_root/examples/self-repair/before.gooo" \
@@ -227,6 +229,7 @@ if test "$conformance_wall_ms" -lt 1; then conformance_wall_ms=1; fi
 
 jq -S -n \
   --argjson releases "$(jq -s . "$work/evidence/releases.ndjson")" \
+  --argjson development_authority "$(cat "$development_authority")" \
   --arg before_digest "$before_digest" --arg proposer_digest "$proposer_digest" --arg mutation_digest "$mutation_digest" --arg selector_digest "$selector_digest" \
   --arg frontier_digest "$frontier_digest" --arg reuse_digest "$reuse_digest" --arg proof_digest "$proof_digest" --arg drift_digest "$drift_digest" --arg drift_negative_digest "$drift_negative_digest" --arg memory_digest "$memory_digest" \
   --argjson state_counts '{"CLOSED":3,"UNKNOWN":3,"REFUTED":3}' --argjson proposer_unknown "$proposer_unknown" --argjson selector_unknown "$selector_unknown" --argjson frontier_unknown "$frontier_unknown" \
@@ -236,7 +239,7 @@ jq -S -n \
   --argjson test_total "$test_total" --argjson test_executed "$test_executed" --argjson test_reused "$test_reused" --argjson test_skipped "$test_skipped" --argjson test_not_observed "$test_not_observed" \
   --argjson build_wall_ms "$build_wall_ms" --argjson test_wall_ms "$test_wall_ms" --argjson conformance_wall_ms "$conformance_wall_ms" --argjson peak_rss_kib "$peak_rss_kib" --argjson go_files "$go_files" --argjson go_lines "$go_lines" --argjson gooo_files "$gooo_files" --argjson gooo_lines "$gooo_lines" \
   '{
-    schema:"gooo/self-repair/integration-input/v1", denominator_cells:12, state_counts:$state_counts, precedence:["REFUTED","UNKNOWN","CLOSED"], releases:$releases,
+    schema:"gooo/self-repair/integration-input/v1", denominator_cells:12, state_counts:$state_counts, precedence:["REFUTED","UNKNOWN","CLOSED"], releases:$releases, development_authority:$development_authority,
     observation:{decision:"UNKNOWN_TOP_LEVEL",observed_state:"CLOSED",expected_state:"UNKNOWN",source_line:3,artifact_digest:$before_digest},
     proposal:{state:$proposer.state,candidate_count:$proposer.candidate_count,candidate_id:$proposer.candidates[0].candidate_id,unknown:$proposer_unknown,artifact_digest:$proposer_digest},
     mutation:{generated:$mutation_report.summary.generated,attempted:$mutation_report.summary.attempted,killed:$mutation_report.summary.killed,unknown:$mutation_report.summary.unknown,refuted:$mutation_report.summary.refuted,selected_mutant_id:$mutation_selected.mutant_id,selected_mutant_state:$mutation_selected.state,artifact_digest:$mutation_digest},
@@ -258,16 +261,24 @@ mkdir -p "$artifact_dir"
   --contract "$repo_root/contracts/self-repair-lifecycle-denominator-v1.json" --ir "$work/semantic-ir.json" \
   --external-inputs "$work/evidence/integration-input.json" --artifact-dir "$artifact_dir" --subject-sha "$subject_sha" --go-version "$go_version"
 
-test "$(find "$artifact_dir" -maxdepth 1 -type f | wc -l | tr -d ' ')" -eq 11
+test "$(find "$artifact_dir" -maxdepth 1 -type f | wc -l | tr -d ' ')" -eq 12
 test "$(wc -l < "$artifact_dir/claims.ndjson" | tr -d ' ')" -eq 9
 jq -e '
   .denominator.total == 12 and .denominator.exact == true and .denominator.activity_mapping == "1:1" and .denominator.released_gooo_activities == 12 and
   .claim_denominator == {total:9,exact:true} and
   .state_counts == {CLOSED:3,UNKNOWN:3,REFUTED:3} and .precedence == ["REFUTED","UNKNOWN","CLOSED"] and .metrics.repository_writes == 0 and
+  .development_authority.state == "REFUTED" and .development_authority.direct_main_push == 1 and .development_authority.offending_commit == "5dca56d" and .development_authority.historical_violation_count == 1 and .development_authority.repository_direct_writes_after_guard == 0 and .development_authority.v020_release_tag == "v0.2.0" and .development_authority.v020_release_immutable == true and
   .metrics.tests.total == (.metrics.tests.executed + .metrics.tests.reused + .metrics.tests.skipped + .metrics.tests.not_observed) and
   (.metrics.build_wall_ms|type) == "number" and (.metrics.test_wall_ms|type) == "number" and (.metrics.conformance_wall_ms|type) == "number" and
   (.metrics.peak_rss_kib|type) == "number" and (.metrics.go_files|type) == "number" and (.metrics.go_lines|type) == "number" and (.metrics.gooo_files|type) == "number" and (.metrics.gooo_lines|type) == "number" and
   (.external_releases|length) == 8 and .external_utility.state == "UNKNOWN"
+' "$artifact_dir/repair-manifest.json" >/dev/null
+jq -e --arg event "${GITHUB_EVENT_NAME:-}" --arg ref "${GITHUB_REF:-}" '
+  if $event == "push" and $ref == "refs/heads/main" then
+    .development_authority.current_guard_state == "CLOSED" and .development_authority.current_pr_associated_path == 1 and .development_authority.current_pr_number > 0 and .development_authority.current_merge_commit_sha != ""
+  else
+    .development_authority.current_guard_state == "UNKNOWN" and .development_authority.current_pr_associated_path == 0
+  end
 ' "$artifact_dir/repair-manifest.json" >/dev/null
 jq -e -s '
   length == 9 and ([.[].state] | sort | join(",")) == "CLOSED,CLOSED,CLOSED,REFUTED,REFUTED,REFUTED,UNKNOWN,UNKNOWN,UNKNOWN" and
