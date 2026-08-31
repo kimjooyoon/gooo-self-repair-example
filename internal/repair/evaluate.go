@@ -147,7 +147,7 @@ func Evaluate(options EvaluateOptions) error {
 			RecordType:                "CLAIM",
 			CaseID:                    scenario.CaseID,
 			Phase:                     scenario.Phase,
-			Kind:                       scenario.Kind,
+			Kind:                      scenario.Kind,
 			Sequence:                  len(claims) + 1,
 			FinalState:                finalState,
 			BeforeOutcome:             before.Outcome,
